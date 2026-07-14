@@ -6,6 +6,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
+  Settings,
   ArrowLeftRight,
   BarChart3,
   FileText,
@@ -27,7 +28,6 @@ import {
   ScrollText,
   BookCopy,
   X,
-  Briefcase,
 } from 'lucide-react';
 
 // ==========================================
@@ -54,11 +54,7 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Chart of Accounts', path: '/master/chart-of-accounts', icon: BookOpen },
       { label: 'Exchange Rates', path: '/master/exchange-rates', icon: ArrowLeftRight },
-      
-      // 🌟 အောက်ပါ ၂ ကြောင်းကို ပြင်ဆင်/အသစ်ထည့်ပါ 🌟
-      { label: 'Customers & Vendors', path: '/master/customers-vendors', icon: Users },
-      { label: 'Fixed Assets', path: '/master/fixed-assets', icon: Briefcase },
-      
+      { label: 'Customers & Vendors', path: '/master/parties', icon: Users },
       { label: 'Products / Items', path: '/master/products', icon: Boxes },
       { label: 'Projects / Cost Centers', path: '/master/projects', icon: FolderKanban },
     ],

@@ -14,21 +14,15 @@ import ChartOfAccountsPage from './pages/ChartOfAccountsPage';
 import Dashboard from './pages/Dashboard';
 import CashBankPage from './pages/CashBankPage';
 
-// 🌟 ယခုအသစ်ထည့်သွင်းမည့် Pages များ (ဤ ၄ ကြောင်းကို အသစ်ထည့်ပါ) 🌟
-import ExchangeRates from './pages/ExchangeRates';
-import CustomersVendors from './pages/CustomersVendors';
-import FixedAssets from './pages/FixedAssets';
-import InvoicePage from './pages/InvoicePage';
-
 // Placeholder (ယာယီ) ထားရှိသော Pages များ
 import {
-  // ExchangeRatesPage,  <-- ဤနေရာကို ဖျက်ပါ (သို့) Comment ပိတ်ပါ
-  // PartiesPage,        <-- ဤနေရာကို ဖျက်ပါ (သို့) Comment ပိတ်ပါ
+  ExchangeRatesPage,
+  PartiesPage,
   ProductsPage,
   ProjectsPage,
   JournalVouchersPage,
   PurchaseOrdersPage,
-  // SalesInvoicesPage,  <-- ဤနေရာကို ဖျက်ပါ (သို့) Comment ပိတ်ပါ
+  SalesInvoicesPage,
   GoodsReceiptPage,
   GoodsIssuePage,
   InventoryMovementsPage,
@@ -77,11 +71,8 @@ export default function App() {
           
           {/* ၄.၁ Master Data အပိုင်း */}
           <Route path="/master/chart-of-accounts" element={<ChartOfAccountsPage />} />
-          {/* 🌟 ပြင်ဆင်ထားသော လမ်းကြောင်းများ (ဒီ ၃ ကြောင်း ပြင်ထားပါသည်) 🌟 */}
-          <Route path="/master/exchange-rates" element={<ExchangeRates />} />
-          <Route path="/master/customers-vendors" element={<CustomersVendors />} />
-          <Route path="/master/fixed-assets" element={<FixedAssets />} />
-          
+          <Route path="/master/exchange-rates" element={<ExchangeRatesPage />} />
+          <Route path="/master/parties" element={<PartiesPage />} />
           <Route path="/master/products" element={<ProductsPage />} />
           <Route path="/master/projects" element={<ProjectsPage />} />
 
@@ -89,8 +80,7 @@ export default function App() {
           <Route path="/transactions/cash-bank" element={<CashBankPage />} />
           <Route path="/transactions/journal-vouchers" element={<JournalVouchersPage />} />
           <Route path="/transactions/purchase-orders" element={<PurchaseOrdersPage />} />
-          {/* 🌟 ပြင်ဆင်ထားသော လမ်းကြောင်း (ဒီ ၁ ကြောင်း ပြင်ထားပါသည်) 🌟 */}
-          <Route path="/transactions/sales-invoices" element={<InvoicePage />} />
+          <Route path="/transactions/sales-invoices" element={<SalesInvoicesPage />} />
 
           {/* ၄.၃ ကုန်ပစ္စည်း စီမံခန့်ခွဲမှု အပိုင်း (Inventory) */}
           <Route path="/inventory/goods-receipt" element={<GoodsReceiptPage />} />

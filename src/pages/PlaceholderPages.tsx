@@ -1,10 +1,13 @@
 import PagePlaceholder from '../components/PagePlaceholder';
 import {
   BookOpen,
+  ArrowLeftRight,
+  Users,
   Boxes,
   FolderKanban,
   ScrollText,
   ShoppingCart,
+  FileText,
   PackagePlus,
   PackageMinus,
   Move3d,
@@ -17,6 +20,14 @@ import {
   FileSpreadsheet,
   Receipt,
 } from 'lucide-react';
+
+export function ExchangeRatesPage() {
+  return <PagePlaceholder title="Exchange Rates" description="Configure and update multi-currency exchange rates for international transactions." icon={ArrowLeftRight} />;
+}
+
+export function PartiesPage() {
+  return <PagePlaceholder title="Customers & Vendors Directory" description="Manage your customer and vendor master records, including contact details and outstanding balances." icon={Users} />;
+}
 
 export function ProductsPage() {
   return <PagePlaceholder title="Products / Items Master" description="Maintain your product catalog with SKUs, pricing, categories, and stock reorder levels." icon={Boxes} />;
@@ -32,6 +43,10 @@ export function JournalVouchersPage() {
 
 export function PurchaseOrdersPage() {
   return <PagePlaceholder title="Purchase Orders & Bills Payable" description="Create purchase orders, track vendor deliveries, and manage bills payable." icon={ShoppingCart} />;
+}
+
+export function SalesInvoicesPage() {
+  return <PagePlaceholder title="Sales Invoices & Accounts Receivable" description="Generate customer invoices, track payments, and manage your accounts receivable aging." icon={FileText} />;
 }
 
 export function GoodsReceiptPage() {
