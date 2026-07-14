@@ -6,7 +6,6 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Settings,
   ArrowLeftRight,
   BarChart3,
   FileText,
@@ -28,10 +27,12 @@ import {
   ScrollText,
   BookCopy,
   X,
+  Briefcase,
+  ArrowRightLeft
 } from 'lucide-react';
 
 // ==========================================
-// ၂။ Sidebar တွင် ပေါ်မည့် Menu စာရင်းများ (Navigation Data)
+// ၂။ Sidebar တွင် ပေါ်မည့် Menu စာရင်းများ
 // ==========================================
 interface NavItem {
   label: string;
@@ -54,7 +55,8 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Chart of Accounts', path: '/master/chart-of-accounts', icon: BookOpen },
       { label: 'Exchange Rates', path: '/master/exchange-rates', icon: ArrowLeftRight },
-      { label: 'Customers & Vendors', path: '/master/parties', icon: Users },
+      { label: 'Customers & Vendors', path: '/master/customers-vendors', icon: Users },
+      { label: 'Fixed Assets', path: '/master/fixed-assets', icon: Briefcase },
       { label: 'Products / Items', path: '/master/products', icon: Boxes },
       { label: 'Projects / Cost Centers', path: '/master/projects', icon: FolderKanban },
     ],
@@ -73,7 +75,7 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Goods Receipt', path: '/inventory/goods-receipt', icon: PackagePlus },
       { label: 'Goods Issue', path: '/inventory/goods-issue', icon: PackageMinus },
-      { label: 'Stock Movements', path: '/inventory/movements', icon: Move3d },
+      { label: 'Stock Movements', path: '/inventory/movements', icon: ArrowRightLeft },
       { label: 'Stock Balance', path: '/inventory/stock-balance', icon: Scale },
     ],
   },
@@ -105,28 +107,13 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
-      {/* Mobile Screen အတွက် Background Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden" onClick={onClose} />}
 
-      {/* ========================================== */}
-      {/* ၃။ Sidebar ရဲ့ အပြင်အဆင် (Main Container) */}
-      {/* ========================================== */}
-      <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
-      >
-        {/* ========================================== */}
-        {/* ၃.၁ Logo နှင့် Org Name (TIS Academy သို့ ပြင်ဆင်ထားသည်) */}
-        {/* ========================================== */}
+      <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        
+        {/* Logo Section */}
         <div className="h-16 flex items-center justify-between px-5 border-b border-slate-700/50">
           <div className="flex items-center gap-2.5">
-            {/* Logo ပုံထည့်သွင်းခြင်း */}
             <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center p-1 shadow-lg">
               <img src="/images/tis_logo.png" alt="TIS Logo" className="w-full h-full object-contain" />
             </div>
@@ -140,9 +127,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
 
-        {/* ========================================== */}
-        {/* ၃.၂ Menu ခလုတ်များ (Navigation Links) */}
-        {/* ========================================== */}
+        {/* Navigation Section */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5 custom-scrollbar">
           {navSections.map((section) => (
             <div key={section.title}>
@@ -173,12 +158,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        {/* ========================================== */}
-        {/* ၃.၃ Footer အပိုင်း (ရှင်းလင်းအောင် ပြင်ဆင်ထားသည်) */}
-        {/* ========================================== */}
+        {/* Footer Section */}
         <div className="px-3 py-4 border-t border-slate-700/50">
           <div className="flex items-center justify-center text-[11px] text-slate-500 tracking-wider">
-            &copy; {new Date().getFullYear()} TIS Academy. All rights reserved.
+            &copy; {new Date().getFullYear()} TIS Academy.
           </div>
         </div>
       </aside>

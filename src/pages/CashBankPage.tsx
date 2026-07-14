@@ -4,7 +4,7 @@
 // ၁။ လိုအပ်သော Packages နှင့် Services များကို ခေါ်ယူခြင်း (Imports)
 // ==========================================
 import { useState, useEffect } from 'react';
-import { Plus, Search, Download, RefreshCw, X, Pencil, Trash2, ArrowRight } from 'lucide-react';
+import { Plus, Search, Download, RefreshCw, X, Pencil, Trash2, ArrowRight, ArrowDownRight, ArrowUpRight, Wallet, MoreHorizontal, Eye } from 'lucide-react';
 import { googleSheetsService } from '../services/googleSheetsService';
 
 export default function CashBankPage() {
@@ -29,6 +29,9 @@ export default function CashBankPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  // 🟢 3-dots menu အဖွင့်အပိတ်အတွက် State အသစ်
+  const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
   
   // ၂.၅ Transaction အမျိုးအစား (Expense, Income, Transfer)
   const [txnType, setTxnType] = useState<'Expense' | 'Income' | 'Transfer'>('Expense');
@@ -302,6 +305,22 @@ export default function CashBankPage() {
   });
 
   // ==========================================
+  // ၉.၅ Summary KPI တွက်ချက်ခြင်း (KPI Calculations)
+  // ==========================================
+  const totalReceipts = filteredTransactions.reduce((sum: number, txn: any) => {
+    // Book Account သည် Debit ဘက်တွင်ရှိလျှင် Income (Receipt) အဖြစ် သတ်မှတ်သည်
+    const isIncome = txn.Account_Code_Debit === getBookAccountCode(txn.Book);
+    return isIncome ? sum + Number(txn.Amount_MMK || 0) : sum;
+  }, 0);
+
+  const totalPayments = filteredTransactions.reduce((sum: number, txn: any) => {
+    // Book Account သည် Credit ဘက်တွင်ရှိလျှင် Expense (Payment) အဖြစ် သတ်မှတ်သည်
+    const isExpense = txn.Account_Code_Credit === getBookAccountCode(txn.Book);
+    return isExpense ? sum + Number(txn.Amount_MMK || 0) : sum;
+  }, 0);
+
+  const netCash = totalReceipts - totalPayments;
+  // ==========================================
   // ၁၀။ UI ရေးဆွဲခြင်း (Render)
   // ==========================================
   return (
@@ -319,6 +338,39 @@ export default function CashBankPage() {
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+
+        {/* 🟢 ၁၀.၁.၅ Summary KPI Cards အသစ် 🟢 */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4 shadow-sm">
+          <div className="w-11 h-11 rounded-lg bg-emerald-50 flex items-center justify-center">
+            <ArrowDownRight className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500">Total Receipts</p>
+            <p className="text-xl font-bold text-slate-800">{Number(totalReceipts).toLocaleString()} <span className="text-sm font-normal text-slate-500">MMK</span></p>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4 shadow-sm">
+          <div className="w-11 h-11 rounded-lg bg-rose-50 flex items-center justify-center">
+            <ArrowUpRight className="w-5 h-5 text-rose-500" />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500">Total Payments</p>
+            <p className="text-xl font-bold text-slate-800">{Number(totalPayments).toLocaleString()} <span className="text-sm font-normal text-slate-500">MMK</span></p>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4 shadow-sm">
+          <div className={`w-11 h-11 rounded-lg flex items-center justify-center ${netCash >= 0 ? 'bg-brand-50' : 'bg-red-50'}`}>
+            <Wallet className={`w-5 h-5 ${netCash >= 0 ? 'text-brand-600' : 'text-red-500'}`} />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500">Net Cash Flow</p>
+            <p className={`text-xl font-bold ${netCash >= 0 ? 'text-slate-800' : 'text-red-600'}`}>
+              {netCash >= 0 ? '+' : ''}{Number(netCash).toLocaleString()} <span className="text-sm font-normal opacity-70">MMK</span>
+            </p>
+          </div>
+        </div>
+      </div>
         
         {/* ၁၀.၂ Search Bar */}
         <div className="p-4 border-b border-slate-100 flex items-center gap-4">
@@ -367,15 +419,36 @@ export default function CashBankPage() {
                       {txn.Amount_USD ? <span className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">USD: {txn.Amount_USD} (@{txn.Exchange_Rate_USD})</span> : 
                        txn.Amount_SGD ? <span className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded">SGD: {txn.Amount_SGD} (@{txn.Exchange_Rate_SGD})</span> : '-'}
                     </td>
-                    <td className="px-4 py-3 flex justify-center gap-2">
-                      {/* Edit Button */}
-                      <button onClick={() => openEditModal(txn)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
-                        <Pencil className="w-4 h-4"/>
+                    <td className="px-4 py-3 relative text-center">
+                      <button
+                        onClick={() => setOpenMenuIndex(openMenuIndex === idx ? null : idx)}
+                        className="p-1.5 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors"
+                      >
+                        <MoreHorizontal className="w-5 h-5 mx-auto" />
                       </button>
-                      {/* Delete Button */}
-                      <button onClick={() => setDeleteConfirmId(txn._rowIndex)} className="p-1 text-rose-600 hover:bg-rose-50 rounded">
-                        <Trash2 className="w-4 h-4"/>
-                      </button>
+                      
+                      {openMenuIndex === idx && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={() => setOpenMenuIndex(null)} />
+                          <div className="absolute right-8 top-1/2 -translate-y-1/2 w-32 bg-white rounded-lg shadow-xl border border-slate-200 z-20 py-1 animate-fade-in text-left">
+                            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+                              <Eye className="w-4 h-4" /> View
+                            </button>
+                            <button 
+                              onClick={() => { openEditModal(txn); setOpenMenuIndex(null); }} 
+                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors"
+                            >
+                              <Pencil className="w-4 h-4" /> Edit
+                            </button>
+                            <button
+                              onClick={() => { setDeleteConfirmId(txn._rowIndex); setOpenMenuIndex(null); }}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" /> Delete
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))

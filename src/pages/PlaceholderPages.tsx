@@ -1,17 +1,6 @@
 import PagePlaceholder from '../components/PagePlaceholder';
 import {
-  BookOpen,
-  ArrowLeftRight,
-  Users,
-  Boxes,
-  FolderKanban,
-  ScrollText,
   ShoppingCart,
-  FileText,
-  PackagePlus,
-  PackageMinus,
-  Move3d,
-  Scale,
   BarChart3,
   TrendingUp,
   ClipboardList,
@@ -21,48 +10,8 @@ import {
   Receipt,
 } from 'lucide-react';
 
-export function ExchangeRatesPage() {
-  return <PagePlaceholder title="Exchange Rates" description="Configure and update multi-currency exchange rates for international transactions." icon={ArrowLeftRight} />;
-}
-
-export function PartiesPage() {
-  return <PagePlaceholder title="Customers & Vendors Directory" description="Manage your customer and vendor master records, including contact details and outstanding balances." icon={Users} />;
-}
-
-export function ProductsPage() {
-  return <PagePlaceholder title="Products / Items Master" description="Maintain your product catalog with SKUs, pricing, categories, and stock reorder levels." icon={Boxes} />;
-}
-
-export function ProjectsPage() {
-  return <PagePlaceholder title="Projects / Cost Centers" description="Set up project codes and cost centers to track expenses and budgets across initiatives." icon={FolderKanban} />;
-}
-
-export function JournalVouchersPage() {
-  return <PagePlaceholder title="Journal Vouchers" description="Create and post manual journal entries with debit/credit line items for adjustments and accruals." icon={ScrollText} />;
-}
-
 export function PurchaseOrdersPage() {
   return <PagePlaceholder title="Purchase Orders & Bills Payable" description="Create purchase orders, track vendor deliveries, and manage bills payable." icon={ShoppingCart} />;
-}
-
-export function SalesInvoicesPage() {
-  return <PagePlaceholder title="Sales Invoices & Accounts Receivable" description="Generate customer invoices, track payments, and manage your accounts receivable aging." icon={FileText} />;
-}
-
-export function GoodsReceiptPage() {
-  return <PagePlaceholder title="Goods Receipt" description="Record inbound inventory from purchase orders with quantity verification and warehouse assignment." icon={PackagePlus} />;
-}
-
-export function GoodsIssuePage() {
-  return <PagePlaceholder title="Goods Issue" description="Process outbound inventory for sales invoices and internal consumption with stock deductions." icon={PackageMinus} />;
-}
-
-export function InventoryMovementsPage() {
-  return <PagePlaceholder title="Inventory Movements" description="View the complete stock ledger with all inbound, outbound, and transfer movements." icon={Move3d} />;
-}
-
-export function StockBalancePage() {
-  return <PagePlaceholder title="Real-time Stock Balance" description="Monitor current stock levels across warehouses with valuation and reorder alerts." icon={Scale} />;
 }
 
 export function APSummaryPage() {

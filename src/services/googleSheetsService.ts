@@ -1,21 +1,36 @@
 // src/services/googleSheetsService.ts
 
-// 🌟 ၁။ ယခင် Data (Cash & Bank, COA) များအတွက် App Script Link အဟောင်း (ဒီနေရာမှာ သင့် Link အဟောင်း ပြန်ထည့်ပါ)
-const DATA_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIhbs0Wnhc-I1bjPicNUu5sxlhV86fC9gzNwDr2cl5gbntk1Zvf6JH36JoKogjLODy/exec'; 
+// 🌟 ၁။ URL အသစ်နှင့် အဟောင်းများကို စနစ်တကျ ကြေညာခြင်း
+const AUTH_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwoMlr_08HP2Q3Qz1GPPK4j_z3ZMy_DcgtQkfZIBipRyZqOD6NyliT4NtSQoZ6F6XIrcg/exec'; // Login
+const DATA_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIhbs0Wnhc-I1bjPicNUu5sxlhV86fC9gzNwDr2cl5gbntk1Zvf6JH36JoKogjLODy/exec'; // Accounting Data
+const INVENTORY_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxPH6BkUvw6mNTpeKOrIa9sTqajD5V0lBPrfKXlp5QxciCI_NGvtTac0yq-joaZzTvR/exec'; // Inventory Data
 
-// ယခု User Login အတွက် ဖန်တီးလိုက်သော App Script Link အသစ်
-const AUTH_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwoMlr_08HP2Q3Qz1GPPK4j_z3ZMy_DcgtQkfZIBipRyZqOD6NyliT4NtSQoZ6F6XIrcg/exec';
-
-// Sheet နာမည်ကို ကြည့်ပြီး ဘယ် Link ကို သုံးမလဲ ဆုံးဖြတ်ပေးမည့် Function
+// 🌟 ၂။ Sheet နာမည်ပေါ်မူတည်ပြီး URL ရွေးချယ်ပေးမည့် Function
 const getTargetUrl = (sheetName: string) => {
-  return sheetName === '0_Users' ? AUTH_WEB_APP_URL : DATA_WEB_APP_URL;
+  // Authentication အတွက်
+  if (sheetName === '0_Users') return AUTH_WEB_APP_URL;
+
+  // Inventory နှင့် သက်ဆိုင်သော Sheet များစာရင်း
+  const inventorySheets = [
+    '3_Goods_Receipt_IN', 
+    '4_Goods_Issue_OUT', 
+    '5_Inventory_Movements', 
+    '6_Inventory_Balance',
+    '9_Projects' // အကယ်၍ Projects ကို Inventory Database အောက်မှာထားလျှင်
+  ];
+
+  if (inventorySheets.includes(sheetName)) {
+    return INVENTORY_WEB_APP_URL;
+  }
+
+  // ကျန်ရှိသော Accounting Data များအတွက်
+  return DATA_WEB_APP_URL;
 };
 
 export const googleSheetsService = {
   readData: async (sheetName: string) => {
     const baseUrl = getTargetUrl(sheetName);
     try {
-      // 🌟 Apps Script က လက်ခံမည့် ?action=read&sheet=... ဟု အတိအကျ ပို့ပေးရမည်
       const response = await fetch(`${baseUrl}?action=read&sheet=${sheetName}`);
       const result = await response.json();
       if (result.status === 'success') {
@@ -23,7 +38,7 @@ export const googleSheetsService = {
       }
       throw new Error(result.message || 'Error reading data');
     } catch (error) {
-      console.error('Error reading from Google Sheets:', error);
+      console.error(`Error reading ${sheetName}:`, error);
       throw error;
     }
   },
@@ -31,10 +46,9 @@ export const googleSheetsService = {
   writeData: async (sheetName: string, data: any) => {
     const baseUrl = getTargetUrl(sheetName);
     try {
-      // 🌟 POST ဖြစ်သော်လည်း URL ထဲတွင် action နှင့် sheet ကို ထည့်ပေးရမည် (Apps Script ၏ e.parameter အတွက်)
       const response = await fetch(`${baseUrl}?action=write&sheet=${sheetName}`, {
         method: 'POST',
-        body: JSON.stringify(data), // Payload အလွတ်သာ ပို့မည်
+        body: JSON.stringify(data),
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
       });
       const result = await response.json();
@@ -43,7 +57,7 @@ export const googleSheetsService = {
       }
       throw new Error(result.message || 'Error writing data');
     } catch (error) {
-      console.error('Error writing to Google Sheets:', error);
+      console.error(`Error writing to ${sheetName}:`, error);
       throw error;
     }
   },
@@ -62,7 +76,7 @@ export const googleSheetsService = {
       }
       throw new Error(result.message || 'Error updating data');
     } catch (error) {
-      console.error('Error updating Google Sheets:', error);
+      console.error(`Error updating ${sheetName}:`, error);
       throw error;
     }
   },
@@ -81,7 +95,7 @@ export const googleSheetsService = {
       }
       throw new Error(result.message || 'Error deleting data');
     } catch (error) {
-      console.error('Error deleting from Google Sheets:', error);
+      console.error(`Error deleting from ${sheetName}:`, error);
       throw error;
     }
   }
