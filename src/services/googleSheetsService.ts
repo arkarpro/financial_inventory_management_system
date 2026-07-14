@@ -5,18 +5,20 @@ const AUTH_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwoMlr_08HP2Q3
 const DATA_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIhbs0Wnhc-I1bjPicNUu5sxlhV86fC9gzNwDr2cl5gbntk1Zvf6JH36JoKogjLODy/exec'; // Accounting Data
 const INVENTORY_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxPH6BkUvw6mNTpeKOrIa9sTqajD5V0lBPrfKXlp5QxciCI_NGvtTac0yq-joaZzTvR/exec'; // Inventory Data
 
-// 🌟 ၂။ Sheet နာမည်ပေါ်မူတည်ပြီး URL ရွေးချယ်ပေးမည့် Function
+// src/services/googleSheetsService.ts ထဲမှ getTargetUrl function ကို ရှာပြီး အောက်ပါအတိုင်း ပြင်ပါ
+
 const getTargetUrl = (sheetName: string) => {
   // Authentication အတွက်
   if (sheetName === '0_Users') return AUTH_WEB_APP_URL;
 
-  // Inventory နှင့် သက်ဆိုင်သော Sheet များစာရင်း
+  // Inventory နှင့် သက်ဆိုင်သော Sheet များစာရင်း (ဒီထဲမှာ 1_Product_Master ကို ထပ်ထည့်လိုက်ပါပြီ) 🌟
   const inventorySheets = [
+    '1_Product_Master',      // <--- ဒီနေရာမှာ အသစ်ထပ်ထည့်လိုက်ပါ
     '3_Goods_Receipt_IN', 
     '4_Goods_Issue_OUT', 
     '5_Inventory_Movements', 
     '6_Inventory_Balance',
-    '9_Projects' // အကယ်၍ Projects ကို Inventory Database အောက်မှာထားလျှင်
+    '9_Projects' // အကယ်၍ 10_Projects သို့ ပြောင်းထားပါက '10_Projects' ဟု ပြင်ပါ
   ];
 
   if (inventorySheets.includes(sheetName)) {
