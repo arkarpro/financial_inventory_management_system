@@ -20,6 +20,7 @@ import CashBankPage from './pages/CashBankPage';
 import JournalVouchersPage from './pages/JournalVouchersPage';
 import PurchaseOrdersPage from './pages/PayablePage';
 import InvoicePage from './pages/InvoicePage';
+import WarehouseLocationsPage from './pages/WarehouseLocationsPage';
 import GoodsReceiptPage from './pages/GoodsReceiptPage'; // 🟢 အသစ်
 import GoodsIssuePage from './pages/GoodsIssuePage';     // 🟢 အသစ်
 import InventoryMovementsPage from './pages/InventoryMovementsPage'; // 🟢 အသစ်
@@ -27,6 +28,7 @@ import StockBalancePage from './pages/StockBalancePage'; // 🟢 အသစ်
 
 // Placeholder Pages (အကယ်၍ အချို့ဖိုင်များ မရှိသေးပါက Placeholder ကို သုံးပါ)
 import { APSummaryPage, ARSummaryPage, JVSummaryPage, CashBankRegisterPage, GeneralLedgerPage, TrialBalancePage, ProfitLossPage, BalanceSheetPage } from './pages/PlaceholderPages';
+
 
 export default function App() {
   // ==========================================
@@ -69,6 +71,7 @@ export default function App() {
 
           {/* ၄.၃ Inventory အပိုင်း */}
           <Route path="/inventory/goods-receipt" element={<GoodsReceiptPage />} />
+          <Route path="/master/warehouse-locations" element={<WarehouseLocationsPage />} />
           <Route path="/inventory/goods-issue" element={<GoodsIssuePage />} />
           <Route path="/inventory/movements" element={<InventoryMovementsPage />} />
           <Route path="/inventory/stock-balance" element={<StockBalancePage />} />
