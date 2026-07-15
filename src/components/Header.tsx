@@ -1,14 +1,14 @@
 // src/components/Header.tsx
 
 // ==========================================
-// ၁။ လိုအပ်သော Packages နှင့် Icons များ ခေါ်ယူခြင်း (LogOut Icon အသစ်ပါဝင်သည်)
+// ၁။ လိုအပ်သော Packages နှင့် Icons များ ခေါ်ယူခြင်း
 // ==========================================
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Menu, Search, Bell, LogOut } from 'lucide-react';
 
 // ==========================================
-// ၂။ Header တွင် လက်ခံမည့် Props များ (User နှင့် Logout လုပ်ဆောင်ချက် ထပ်တိုးထားသည်)
+// ၂။ Header တွင် လက်ခံမည့် Props များ
 // ==========================================
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -16,36 +16,40 @@ interface HeaderProps {
   onLogout?: () => void;    // ထွက်ရန် Function
 }
 
-// စာမျက်နှာအလိုက် ပေါ်မည့် ခေါင်းစဉ်များ
+// 💡 Sidebar လမ်းကြောင်းသစ်များနှင့် ကိုက်ညီအောင် ပြင်ဆင်ထားသော ခေါင်းစဉ်များ
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   '/': { title: 'Dashboard', subtitle: 'Financial overview & key metrics' },
+  // Master Data
   '/master/chart-of-accounts': { title: 'Chart of Accounts', subtitle: 'Master data setup' },
+  '/master/voucher-types': { title: 'Voucher Types', subtitle: 'Master data setup' },
   '/master/exchange-rates': { title: 'Exchange Rates', subtitle: 'Master data setup' },
-  '/master/parties': { title: 'Customers & Vendors', subtitle: 'Master data setup' },
-  '/master/products': { title: 'Products / Items', subtitle: 'Master data setup' },
-  '/master/projects': { title: 'Projects / Cost Centers', subtitle: 'Master data setup' },
+  '/master/customers-vendors': { title: 'Customers & Vendors', subtitle: 'Master data setup' },
+  '/master/projects': { title: 'Projects', subtitle: 'Master data setup' },
+  '/master/fixed-assets': { title: 'Fixed Assets', subtitle: 'Master data setup' },
+  '/master/products': { title: 'Products & Items', subtitle: 'Master data setup' },
+  '/master/locations': { title: 'Warehouse Locations', subtitle: 'Master data setup' },
+  // Transactions
   '/transactions/cash-bank': { title: 'Cash & Bank', subtitle: 'Receipts & payments' },
+  '/transactions/accounts-receivable': { title: 'Accounts Receivable', subtitle: 'Core transactions' },
+  '/transactions/accounts-payable': { title: 'Accounts Payable', subtitle: 'Core transactions' },
   '/transactions/journal-vouchers': { title: 'Journal Vouchers', subtitle: 'Core transactions' },
-  '/transactions/purchase-orders': { title: 'Purchase Orders', subtitle: 'Core transactions' },
-  '/transactions/sales-invoices': { title: 'Sales Invoices (AR)', subtitle: 'Core transactions' },
-  '/inventory/goods-receipt': { title: 'Goods Receipt', subtitle: 'Inbound from PO' },
-  '/inventory/goods-issue': { title: 'Goods Issue', subtitle: 'Outbound from invoices' },
+  // Inventory
+  '/inventory/goods-receipt': { title: 'Goods Receipt (In)', subtitle: 'Inbound inventory' },
+  '/inventory/goods-issue': { title: 'Goods Issue (Out)', subtitle: 'Outbound inventory' },
   '/inventory/movements': { title: 'Stock Movements', subtitle: 'Stock ledger' },
   '/inventory/stock-balance': { title: 'Stock Balance', subtitle: 'Real-time inventory' },
-  '/dashboards/ap-summary': { title: 'AP Summary', subtitle: 'Accounts payable dashboard' },
-  '/dashboards/ar-summary': { title: 'AR Summary', subtitle: 'Accounts receivable dashboard' },
-  '/dashboards/jv-summary': { title: 'JV Summary', subtitle: 'Journal voucher dashboard' },
-  '/dashboards/cash-bank-register': { title: 'Cash & Bank Register', subtitle: 'Cash flow dashboard' },
+  // Reports
   '/reports/general-ledger': { title: 'General Ledger', subtitle: 'Consolidated transactions' },
   '/reports/trial-balance': { title: 'Trial Balance', subtitle: 'Financial reporting' },
   '/reports/profit-loss': { title: 'Profit & Loss', subtitle: 'Financial reporting' },
   '/reports/balance-sheet': { title: 'Balance Sheet', subtitle: 'Financial reporting' },
+  '/reports/cash-bank-register': { title: 'Cash & Bank Register', subtitle: 'Cash flow dashboard' },
 };
 
 export default function Header({ onMenuClick, user, onLogout }: HeaderProps) {
   const location = useLocation();
   const [notifOpen, setNotifOpen] = useState(false);
-  const page = pageTitles[location.pathname] ?? { title: 'Nexus ERP', subtitle: '' };
+  const page = pageTitles[location.pathname] ?? { title: 'TIS Academy', subtitle: 'Financial System' };
 
   const notifications = [
     { id: 1, text: 'Invoice INV-2026-0048 is overdue', time: '2h ago', color: 'bg-red-500' },
@@ -127,16 +131,14 @@ export default function Header({ onMenuClick, user, onLogout }: HeaderProps) {
         </div>
 
         {/* ========================================== */}
-        {/* ၆။ User Profile နှင့် Logout ခလုတ် (Dynamic အဖြစ် ပြင်ဆင်ထားသည်) */}
+        {/* ၆။ User Profile နှင့် Logout ခလုတ် */}
         {/* ========================================== */}
         <div className="flex items-center gap-2.5 pl-2 lg:pl-3 lg:border-l border-slate-200">
           
-          {/* User ရဲ့ နာမည် ပထမဆုံး စာလုံးကို ယူပြမည် */}
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm">
             {user?.Username ? user.Username.charAt(0).toUpperCase() : 'U'}
           </div>
           
-          {/* User Name နှင့် Position */}
           <div className="hidden lg:block pr-2">
             <p className="text-sm font-semibold text-slate-800 leading-tight">
               {user?.Username || 'Admin User'}
@@ -146,7 +148,6 @@ export default function Header({ onMenuClick, user, onLogout }: HeaderProps) {
             </p>
           </div>
 
-          {/* Logout ခလုတ် */}
           <button 
             onClick={onLogout}
             className="p-2 ml-1 text-rose-500 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors flex items-center"
